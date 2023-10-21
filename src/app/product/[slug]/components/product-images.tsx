@@ -14,7 +14,6 @@ const ProductImages = ({imageUrls, name}: ProductImagesProps) => {
 
     const handleImageClick = (imageUrl: string) => {
         setCurrentImage(imageUrl);
-        console.log(imageUrl)
     }
 
     return ( 
