@@ -1,7 +1,7 @@
 "use client";
 
 import { ProductWithTotalPrice } from "@/helpers/product";
-import { ReactNode, createContext, useState } from "react";
+import { ReactNode, createContext, useMemo, useState } from "react";
 
 export interface CartProduct extends ProductWithTotalPrice {
     quantity: number
@@ -12,6 +12,9 @@ interface ICartContext {
     cartTotalPrice: number;
     cartBasePrice: number;
     cartTotalDiscount: number;
+    total: number,
+    subtotal: number,
+    totalDiscount: number,
     addProductToCart: (product: CartProduct) => void;
     decreaseProductQuantity: (productId: string) => void;
     increaseProductQuantity: (productId: string) => void;
@@ -23,6 +26,9 @@ export const CartContext = createContext<ICartContext>({
     cartTotalPrice: 0,
     cartBasePrice: 0,
     cartTotalDiscount: 0,
+    total: 0,
+    subtotal: 0,
+    totalDiscount: 0,
     addProductToCart: () => {},
     decreaseProductQuantity: () => {},
     increaseProductQuantity: () => {},
@@ -32,6 +38,23 @@ export const CartContext = createContext<ICartContext>({
 const CartProvider = ({children}: {children: ReactNode}) => {
     
     const [products, setProducts] = useState<CartProduct[]>([])
+
+    // Preço com desconto do produto
+    const subtotal = useMemo(() => {
+        return products.reduce((acc, product) => {
+            return acc + Number(product.basePrice) * product.quantity
+        }, 0)
+    }, [products])
+
+    // Preço total do produto
+    const total = useMemo(() => {
+        return products.reduce((acc, product) => {
+            return acc + Number(product.totalPrice) * product.quantity
+        }, 0)
+    }, [products])
+
+    // valor do desconto
+    const totalDiscount = subtotal - total
 
     const addProductToCart = (product: CartProduct) => {
         // se o produto já estiver no carrinho, apenas aumente a quantidade
@@ -103,7 +126,10 @@ const CartProvider = ({children}: {children: ReactNode}) => {
             removeProduct,
             cartTotalPrice: 0,
             cartBasePrice: 0,
-            cartTotalDiscount: 0
+            cartTotalDiscount: 0,
+            total,
+            subtotal,
+            totalDiscount
          }}
         >
             {children}
