@@ -49,7 +49,8 @@ const Cart = () => {
             </ScrollArea>
             </div>
 
-            <div className="flex flex-col gap-3">
+            {products.length > 0 && (
+                <div className="flex flex-col gap-3">
                 <Separator />
                 <div className="flex items-center justify-between">
                     <p>Subtotal</p>
@@ -71,7 +72,8 @@ const Cart = () => {
                     <p>R$ {total.toFixed(2)}</p>
                 </div>
                 <Button className="uppercase font-bold mt-7" onClick={handleFinishPurchaseClick}>Finalizar Compra</Button>
-            </div>
+            </div> 
+            )}
         </div>
      );
 }
