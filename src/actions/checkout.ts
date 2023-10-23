@@ -11,7 +11,7 @@ export const createCheckout = async (products: CartProduct[]) => {
 
 // sourcery skip: inline-immediately-returned-variable
   const checkout = await stripe.checkout.sessions.create({
-    payment_method_types: ["card", "boleto"],
+    payment_method_types: ["card"],
     mode: "payment",
     success_url: process.env.HOST_URL,
     cancel_url: process.env.HOST_URL,
@@ -21,7 +21,7 @@ export const createCheckout = async (products: CartProduct[]) => {
     line_items: products.map((product) => {
       return {
         price_data: {
-          currency: "brl",
+          currency: "brl", 
           product_data: {
             name: product.name,
             description: product.description,
