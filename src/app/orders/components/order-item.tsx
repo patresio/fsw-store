@@ -11,6 +11,7 @@ import OrderProductItem from "./order-product-item";
 import { Separator } from "@/components/ui/separator";
 import { useMemo } from "react";
 import { computeProductTotalPrice } from "@/helpers/product";
+import { getOrderStatus } from "../helpers/status";
 
 interface OrdemItemProps {
   order: Prisma.OrderGetPayload<{
@@ -49,7 +50,9 @@ const OrderItem = ({ order }: OrdemItemProps) => {
           <AccordionTrigger>
             <div className="flex flex-col gap-1 text-left">
               <h2>Pedido com {order.orderProducts.length} produto(s)</h2>
-              <span className="text-sm opacity-60">Feito em {format(order.createdAt, "d/MM/y 'às' HH:mm")}</span>
+              <span className="text-sm opacity-60">
+                Feito em {format(order.createdAt, "d/MM/y 'às' HH:mm")}
+              </span>
             </div>
           </AccordionTrigger>
 
@@ -58,9 +61,8 @@ const OrderItem = ({ order }: OrdemItemProps) => {
               <div className="flex items-center justify-between">
                 <div className="font-bold uppercase">
                   <p>Status</p>
-                  <p className="text-[#8162ff]">
-                    {(order.status === "PAYMENT_CONFIRMED" && "PAGO") ||
-                      "AGUARDANDO PAGAMENTO"}
+                  <p className="uppercase text-[#8162ff]">
+                    {getOrderStatus(order.status)}
                   </p>
                 </div>
 
