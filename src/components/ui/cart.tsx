@@ -17,8 +17,6 @@ const Cart = () => {
 
   const { products, total, totalDiscount, subtotal } = useContext(CartContext);
 
-  console.log(data.user.id);
-
   const handleFinishPurchaseClick = async () => {
     if (!data?.user) {
       // TODO: redirecionar para o login
@@ -26,9 +24,9 @@ const Cart = () => {
     }
 
     // TODO: atualizar o tipo do user
-    await createOrder(products, (data?.user as any).id);
+    const order = await createOrder(products, (data?.user as any).id);
 
-    const checkout = await createCheckout(products);
+    const checkout = await createCheckout(products, order.id);
 
     const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
