@@ -8,8 +8,6 @@ import OrderItem from "./components/order-item";
 async function OrderPage() {
   const user = getServerSession(authOptions);
 
-  console.log(user);
-
   if (!user) {
     // TODO: Melhorar a perfomance
     return <p>Access Denied</p>;
@@ -28,6 +26,7 @@ async function OrderPage() {
     },
   });
 
+  // TODO: componentizar badge
   return (
     <div className="p-5">
       <Badge
