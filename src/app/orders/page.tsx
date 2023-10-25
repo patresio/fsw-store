@@ -1,23 +1,21 @@
 import { Badge } from "@/components/ui/badge";
-import { authOptions } from "@/lib/auth";
 import { prismaClient } from "@/lib/prisma";
 import { PackageSearchIcon } from "lucide-react";
-import { getServerSession } from "next-auth";
 import OrderItem from "./components/order-item";
+import { getServerSession } from "next-auth/next";
 
-export const dynamic = "force-dynamic";
-
-async function OrderPage() {
-  const user = getServerSession(authOptions);
-
-  if (!user) {
-    // TODO: Melhorar a perfomance
-    return <p>Access Denied</p>;
+export async function OrderPage() {
+  const session = getServerSession()
+  
+  if (!session) {
+    return;
   }
+
+  console.log(JSON.stringify(session, null, 2));
 
   const orders = await prismaClient.order.findMany({
     where: {
-      userId: (user as any).id,
+      userId: (session as any).id,
     },
     include: {
       orderProducts: {
